@@ -1,0 +1,17 @@
+name: portainer
+services:
+  portainer:
+    ports:
+      - 8000:8000
+      - 9443:9443
+    container_name: portainer
+    restart: always
+    volumes:
+      - /run/user/1000/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    image: portainer/portainer-ce:latest
+
+volumes:
+  portainer_data:
+    external: true
+    name: portainer_data

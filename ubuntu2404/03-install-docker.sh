@@ -14,9 +14,4 @@ echo \
   $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt update
-sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin uidmap
-
-# Rootless
-sudo systemctl disable --now docker.service docker.socket
-sudo rm /var/run/docker.sock
-/usr/bin/dockerd-rootless-setuptool.sh install
+sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
