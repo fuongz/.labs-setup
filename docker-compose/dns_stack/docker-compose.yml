@@ -1,9 +1,21 @@
 name: dns_stack
 
+volumes:
+  pihole_config:
+    external: true
+  pihole_dnsmasq:
+    external: true
+
+networks:
+  internal_net:
+    external: true
+
 services:
   pihole:
     container_name: pihole
     image: pihole/pihole:latest
+    networks:
+      - internal_net
     ports:
       - "192.168.1.111:53:53/tcp"
       - "192.168.1.111:53:53/udp"
@@ -13,8 +25,8 @@ services:
       - TZ=Asia/Ho_Chi_Minh
       - WEBPASSWORD=${WEBPASSWORD}
     volumes:
-      - './etc-pihole:/etc/pihole'
-      - './etc-dnsmasq.d:/etc/dnsmasq.d'
+      - 'pihole_config:/etc/pihole'
+      - 'pihole_dnsmasq:/etc/dnsmasq.d'
     cap_add:
       - NET_ADMIN
     restart: unless-stopped

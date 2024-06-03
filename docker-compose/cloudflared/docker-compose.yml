@@ -1,0 +1,13 @@
+name: cloudflared_tunnel
+
+networks:
+  public_net:
+    external: true
+
+services:
+  tunnel:
+    container_name: cloudflared_tunnel
+    image: cloudflare/cloudflared:latest
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARED_TOKEN}
+    networks:
+      - public_net
