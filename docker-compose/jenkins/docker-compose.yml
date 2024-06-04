@@ -1,0 +1,27 @@
+name: jenkins
+
+services:
+  jenkins:
+    container_name: jenkins
+    networks:
+      - internal_net
+    volumes:
+      - jenkins_home:/var/jenkins_home
+    ports:
+      - 8081:8080
+      - 50001:50000
+    restart: on-failure
+    image: jenkins/jenkins:lts-jdk17
+
+networks:
+  internal_net:
+    external: true
+    name: internal_net
+
+volumes:
+  jenkins_home:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /mnt/violet/docker-volumes/jenkins_home
