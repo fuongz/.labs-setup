@@ -1,0 +1,41 @@
+networks:
+  internal_net:
+    external: true
+
+volumes:
+  transmission_config:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ${TRANSMISSION_CONFIG_VOLUME_DIR}
+  transmission_watch:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ${TRANSMISSION_WATCH_VOLUME_DIR}
+
+services:
+  transmission:
+    image: lscr.io/linuxserver/transmission:latest
+    container_name: transmission
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - USER=${TRANSMISSION_WEB_USER}
+      - PASS=${TRANSMISSION_WEB_PASS}
+    volumes:
+      - transmission_config:/config
+      - type: bind
+        source: ${TRANSMISSION_DOWNLOADS_VOLUME_DIR}
+        target: /downloads
+      - transmission_watch:/watch
+    ports:
+      - ${TRANSMISSION_PORT}:9091
+      - 51413:51413
+      - 51413:51413/udp
+    restart: unless-stopped
+    networks:
+      - internal_net
