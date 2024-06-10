@@ -1,0 +1,30 @@
+volumes:
+  code_server_config:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ${CODE_SERVER_CONFIG_VOLUME_DIR}
+
+networks:
+  internal_net:
+    external: true
+
+services:
+  code-server:
+    image: lscr.io/linuxserver/code-server:latest
+    container_name: code-server
+    networks:
+      - internal_net
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=${CODE_SERVER_TZ}
+      - PASSWORD_HASHED=${CODE_SERVER_PASSWORD_HASHED}
+      - SUDO_PASSWORD_HASHED=${CODE_SERVER_SUDO_PASSWORD_HASHED}
+      - DEFAULT_WORKSPACE=${CODE_SERVER_DEFAULT_WORKSPACE}
+    volumes:
+      - code_server_config:/config
+    ports:
+      - ${CODE_SERVER_PORT}:8443
+    restart: unless-stopped
