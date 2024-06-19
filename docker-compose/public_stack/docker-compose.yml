@@ -13,6 +13,12 @@ volumes:
       o: bind
       type: none
       device: /mnt/violet/docker-volumes/jellyfin_config
+  pinchflat_config:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ${PINCHFLAT_VOLUME_CONFIG_DIR}
 
 networks:
   public_net:
@@ -34,3 +40,17 @@ services:
         target: /media
     environment:
       - JELLYFIN_PublishedServerUrl=${JELLYFIN_URL}
+
+  pub_pinchflat:
+    container_name: pub_pinchflat
+    image: ghcr.io/kieraneglin/pinchflat:latest
+    restart: unless-stopped
+    networks:
+      - public_net
+    environment:
+      - TZ:${PINCHFLAT_TZ}
+    volumes:
+      - pinchflat_config:/config
+      - type: bind
+        source: /mnt/blue/music-videos/youtube
+        target: /downloads 
