@@ -13,12 +13,13 @@ volumes:
       o: bind
       type: none
       device: /mnt/violet/docker-volumes/jellyfin_config
-  pinchflat_config:
+  serpbear_data:
     driver: local
     driver_opts:
       o: bind
       type: none
-      device: ${PINCHFLAT_VOLUME_CONFIG_DIR}
+      device: /mnt/violet/docker-volumes/serpbear_data
+
 
 networks:
   public_net:
@@ -41,16 +42,17 @@ services:
     environment:
       - JELLYFIN_PublishedServerUrl=${JELLYFIN_URL}
 
-  pub_pinchflat:
-    container_name: pub_pinchflat
-    image: ghcr.io/kieraneglin/pinchflat:latest
-    restart: unless-stopped
+  serpbear:
     networks:
       - public_net
-    environment:
-      - TZ:${PINCHFLAT_TZ}
     volumes:
-      - pinchflat_config:/config
-      - type: bind
-        source: /mnt/blue/music-videos/youtube
-        target: /downloads 
+      - serpbear_data:/app/data
+    restart: unless-stopped
+    environment:
+      - NEXT_PUBLIC_APP_URL=${SERPBEAR_PUBLIC_URL}
+      - USER=${SERPBEAR_USER}
+      - PASSWORD=${SERPBEAR_PASSWORD}
+      - SECRET=${SERPBEAR_API_SECRET}
+      - APIKEY=${SERPBEAR_API_KEY}
+    container_name: pub_serpbear
+    image: towfiqi/serpbear
