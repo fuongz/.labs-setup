@@ -1,0 +1,17 @@
+[alias]
+  ci = commit
+  co = checkout
+  cim = commit -m
+  l = log --oneline --graph --decorate
+  lg = !git log --pretty=format:\"%C(magenta)%h%Creset -%C(red)%d%Creset %s %C(dim green)(%cr) [%an]\" --abbrev-commit -30
+  aliases = !git config --list | grep 'alias\\.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1\\ \t => \\2/' | sort
+  po = "!git push --set-upstream origin \"$(git rev-parse --abbrev-ref HEAD)\""
+  pu = "!git pull --set-upstream origin \"$(git rev-parse --abbrev-ref HEAD)\""
+  st = status
+  cob = checkout -b
+  del = branch -D
+  br = "branch --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(contents:subject) %(color:green)(%(committerdate    :relative)) [%(authorname)]' --sort=committerdate"
+  save = "!git add -A && git commit -m"
+  s = status -s
+  a = add
+  spu = "!git stash && git pull --rebase --set-upstream origin \"$(git rev-parse --abbrev-ref HEAD)\" && git stash pop"
