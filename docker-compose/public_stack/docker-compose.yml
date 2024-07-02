@@ -47,6 +47,9 @@ volumes:
 networks:
   public_net:
     external: true
+  
+  mysql_net:
+    external: true
 
 services:
   jellyfin:
@@ -107,3 +110,20 @@ services:
     restart: unless-stopped
     networks:
       - public_net
+
+  pub_umami:
+    container_name: pub_umami
+    image: ghcr.io/umami-software/umami:mysql-latest
+    environment:
+      DATABASE_URL: ${UMAMI_DATABASE_URL}
+      DATABASE_TYPE: mysql
+      APP_SECRET: ${UMAMI_APP_SECRET}
+    restart: always
+    networks:
+      - public_net
+      - mysql_net
+    healthcheck:
+      test: ["CMD-SHELL", "curl http://localhost:3000/api/heartbeat"]
+      interval: 5s
+      timeout: 5s
+      retries: 5

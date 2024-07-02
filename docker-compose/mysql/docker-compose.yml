@@ -1,0 +1,26 @@
+name: mysql
+
+volumes:
+  mysql_data:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /mnt/violet/docker-volumes/mysql_data
+
+networks:
+  mysql_net:
+    driver: bridge
+    name: mysql_net
+
+services:
+  mysql:
+    container_name: mysql
+    image: mysql
+    restart: always
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - mysql_net
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
