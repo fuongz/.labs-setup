@@ -36,6 +36,6 @@ services:
       - ${TRANSMISSION_PORT}:9091
       - 51413:51413
       - 51413:51413/udp
-    restart: unless-stopped
+    restart: no
     networks:
       - internal_net

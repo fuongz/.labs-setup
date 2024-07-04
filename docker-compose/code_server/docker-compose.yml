@@ -27,4 +27,4 @@ services:
       - code_server_config:/config
     ports:
       - ${CODE_SERVER_PORT}:8443
-    restart: unless-stopped
+    restart: "no"
