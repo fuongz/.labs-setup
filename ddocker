@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+COMMAND=$1
+
+# Another
+ARG2=$2
+ARG3=$3
+ARG4=$4
+ARG5=$5
+ARG6=$6
+ARG7=$7
+
+if [ $COMMAND = "ps" ]; then
+	docker ps --format "table {{.ID}}\t{{.Ports}}\t{{.Names}}\t{{.State}}\t{{.RunningFor}}"
+else
+	docker $1 $2 $3 $4 $5 $6 $7
+fi
