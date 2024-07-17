@@ -5,32 +5,43 @@ networks:
     name: proxy_net
     driver: bridge
 
+  public_net:
+    external: true
+  
 volumes:
   nginx_proxy_data:
     driver: local
     driver_opts:
       o: bind
       type: none
-      device: /mnt/violet/docker-volumes/nginx_proxy_data
+      device: ${NGINX_PROXY_MANAGER_DATA_DIR}
 
   nginx_proxy_letsencrypt:
     driver: local
     driver_opts:
       o: bind
       type: none
-      device: /mnt/violet/docker-volumes/nginx_proxy_letsencrypt
+      device: ${NGINX_PROXY_MANAGER_LETSENCRYPT_DIR}
 
 services:
-  nginx_proxy_manager:
-    container_name: nginx_proxy_manager
+  internal__tunnel:
+    container_name: internal__tunnel
+    restart: always                                                                                                                                                                         
+    image: cloudflare/cloudflared:latest
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARED_TOKEN}
+    networks:
+      - public_net
+
+  internal__nginx_proxy_manager:
+    container_name: internal__nginx_proxy_manager
     image: jc21/nginx-proxy-manager:latest
-    restart: unless-stopped
+    restart: always
     networks:
       - proxy_net
     ports:
       - 80:80
-      - 81:81
       - 443:443
+      - 81:81
     volumes:
       - nginx_proxy_data:/data
       - nginx_proxy_letsencrypt:/etc/letsencrypt

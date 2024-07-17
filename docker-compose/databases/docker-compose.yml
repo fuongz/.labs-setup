@@ -1,0 +1,77 @@
+name: databases_stack
+
+volumes:
+  redis_data:
+    external: true
+
+  mysql_data:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /mnt/violet/docker-volumes/mysql_data
+
+  mongodb_data:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /mnt/violet/docker-volumes/mongodb_data
+
+  mongodb_config:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /mnt/violet/docker-volumes/mongodb_config
+
+networks:
+  mysql_internal_net:
+    driver: bridge
+    name: mysql_internal_net
+
+  mongo_public_net:
+    driver: bridge
+    name: mongo_public_net
+
+  redis_public_net:
+    driver: bridge
+    name: redis_public_net
+
+services:
+  database__public_redis:
+    container_name: database_public_redis
+    image: redis:7
+    volumes:
+      - redis_data:/data
+    command: redis-server --requirepass "r3d1s"
+    ports:
+      - 6379:6379
+    networks:
+      - redis_public_net
+
+  database__public_mongo:
+    image: mongo
+    container_name: database__public_mongo
+    restart: always
+    networks:
+      - mongo_public_net
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data:/data/db
+      - mongodb_config:/data/configdb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+
+  database__internal_mysql:
+    container_name: database__internal_mysql
+    image: mysql
+    restart: always
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - mysql_internal_net
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}

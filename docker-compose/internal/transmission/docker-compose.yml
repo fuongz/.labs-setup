@@ -2,6 +2,9 @@ networks:
   internal_net:
     external: true
 
+  proxy_net:
+    external: true
+
 volumes:
   transmission_config:
     driver: local
@@ -33,9 +36,9 @@ services:
         target: /downloads
       - transmission_watch:/watch
     ports:
-      - ${TRANSMISSION_PORT}:9091
       - 51413:51413
       - 51413:51413/udp
     restart: no
     networks:
       - internal_net
+      - proxy_net

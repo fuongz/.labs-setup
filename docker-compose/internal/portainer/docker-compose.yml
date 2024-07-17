@@ -1,11 +1,15 @@
-name: portainer
+name: container_stack
+
+networks:
+  proxy_net:
+    external: true
+
 services:
-  portainer:
-    ports:
-      - 8000:8000
-      - 9443:9443
-    container_name: portainer
+  internal__portainer:
+    container_name: internal__portainer
     restart: always
+    networks:
+      - proxy_net
     volumes:
       - /run/user/1000/docker.sock:/var/run/docker.sock
       - portainer_data:/data

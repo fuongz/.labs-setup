@@ -52,8 +52,8 @@ networks:
     external: true
 
 services:
-  jellyfin:
-    container_name: jellyfin
+  pubic__jellyfin:
+    container_name: public__jellyfin
     image: jellyfin/jellyfin
     user: 1000:1000
     restart: unless-stopped
@@ -68,7 +68,7 @@ services:
     environment:
       - JELLYFIN_PublishedServerUrl=${JELLYFIN_URL}
 
-  serpbear:
+  pubic__serpbear:
     networks:
       - public_net
     volumes:
@@ -80,11 +80,11 @@ services:
       - PASSWORD=${SERPBEAR_PASSWORD}
       - SECRET=${SERPBEAR_API_SECRET}
       - APIKEY=${SERPBEAR_API_KEY}
-    container_name: pub_serpbear
+    container_name: public__serpbear
     image: towfiqi/serpbear
 
-  ntfy:
-    container_name: ntfy
+  public__ntfy:
+    container_name: public__ntfy
     image: binwiederhier/ntfy
     command:
       - serve
@@ -111,8 +111,8 @@ services:
     networks:
       - public_net
 
-  pub_umami:
-    container_name: pub_umami
+  public__umami:
+    container_name: public__umami
     image: ghcr.io/umami-software/umami:mysql-latest
     environment:
       DATABASE_URL: ${UMAMI_DATABASE_URL}
