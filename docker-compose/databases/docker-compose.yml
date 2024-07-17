@@ -44,7 +44,7 @@ services:
     image: redis:7
     volumes:
       - redis_data:/data
-    command: redis-server --requirepass "r3d1s"
+    command: redis-server --requirepass ${REDIS_PASS}
     ports:
       - 6379:6379
     networks:
