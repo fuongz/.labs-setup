@@ -1,0 +1,27 @@
+name: mq_stack
+
+networks:
+  mq_net:
+    name: mq_net
+    driver: bridge
+
+volumes:
+  rabbitmq_data:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /mnt/violet/docker-volumes/rabbitmq_data
+
+services:
+    mq__rabbitmq:
+      container_name: mq__rabbitmq
+      restart: unless-stopped
+      networks:
+        - mq_net
+      ports:
+        - 5672:5672
+        - 15672:15672
+      volumes:
+        - rabbitmq_data:/var/lib/rabbitmq
+      image: rabbitmq:3-management

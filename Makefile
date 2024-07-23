@@ -31,6 +31,3 @@ down:
 	if [ $$group_id = "2" ]; then\
 		docker compose -f ./docker-compose/public/docker-compose.yml --env-file ./docker.env/.public.env down; \
 	fi
-
-ps:
-	@docker ps --format "table {{.ID}}\t{{.Ports}}\t{{.Names}}\t{{.State}}\t{{.RunningFor}}"

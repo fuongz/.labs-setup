@@ -1,0 +1,37 @@
+name: internal__git
+
+volumes:
+  gitea_config:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${GITEA_CONFIG_VOLUME_DIR}
+
+  gitea_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${GITEA_DATA_VOLUME_DIR}
+
+networks:
+  mysql_internal_net:
+    external: true
+
+  proxy_net:
+    external: true
+
+services:
+  internal__gitea:
+    container_name: internal__gitea
+    image: gitea/gitea:1.22.1
+    restart: always
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - gitea_config:/etc/gitea
+      - gitea_data:/var/lib/gitea
+    networks:
+      - proxy_net
+      - mysql_internal_net

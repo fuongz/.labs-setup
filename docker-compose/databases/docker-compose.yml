@@ -40,7 +40,8 @@ networks:
 
 services:
   database__public_redis:
-    container_name: database_public_redis
+    container_name: database__public_redis
+    restart: always
     image: redis:7
     volumes:
       - redis_data:/data
