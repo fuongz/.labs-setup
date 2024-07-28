@@ -31,3 +31,7 @@ down:
 	if [ $$group_id = "2" ]; then\
 		docker compose -f ./docker-compose/public/docker-compose.yml --env-file ./docker.env/.public.env down; \
 	fi
+
+install_shell_command:
+	@echo "--- shell command installing... ---"
+	@test ! -f "/usr/local/bin/ddocker" && sudo cp ddocker /usr/local/bin/

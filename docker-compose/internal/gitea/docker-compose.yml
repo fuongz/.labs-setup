@@ -22,6 +22,10 @@ networks:
   proxy_net:
     external: true
 
+  gitea_internal_net:
+    driver: bridge
+    name: gitea_internal_net
+
 services:
   internal__gitea:
     container_name: internal__gitea
@@ -33,5 +37,19 @@ services:
       - gitea_config:/etc/gitea
       - gitea_data:/var/lib/gitea
     networks:
+      - gitea_internal_net
       - proxy_net
       - mysql_internal_net
+
+  internal__gitea_runner:
+    container_name: internal__gitea_runner
+    image: gitea/act_runner:latest
+    restart: always
+    environment:
+      - GITEA_INSTANCE_URL=http://internal__gitea:3000
+      - GITEA_RUNNER_REGISTRATION_TOKEN=tdWxJD4S6wcNZFp8aOsXJkrXoNivlSP9WsaPIIbf
+      - GITEA_RUNNER_NAME=default
+    networks:
+      - gitea_internal_net
+    volumes:
+      - /run/user/1000/docker.sock:/var/run/docker.sock:ro
