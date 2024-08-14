@@ -21,8 +21,8 @@ up:
 		docker compose -f ./docker-compose/public/docker-compose.yml --env-file ./docker.env/.public.env up --detach --build;\
 	else\
 		read -p "- module name (portainer) : " module_name;\
-		test -f "./docker.env/.internal.$$module_name.env" && docker compose -f ./docker-compose/internal/$$module_name/docker-compose.yml --env-file ./docker.env/.internal.$$module_name.env up --detach --build;\
-		test ! -f "./docker.env/.internal.$$module_name.env" && docker compose -f ./docker-compose/internal/$$module_name/docker-compose.yml up --detach --build;\
+		test -f "./docker.env/.internal.$$module_name.env" && echo "Use env file!" && docker compose -f ./docker-compose/internal/$$module_name/docker-compose.yml --env-file ./docker.env/.internal.$$module_name.env up --detach --build;\
+		test ! -f "./docker.env/.internal.$$module_name.env" && echo "No env file!"  &&  docker compose -f ./docker-compose/internal/$$module_name/docker-compose.yml up --detach --build;\
 	fi
 
 down:

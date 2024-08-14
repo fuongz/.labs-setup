@@ -25,7 +25,18 @@ volumes:
       type: none
       device: /mnt/violet/docker-volumes/mongodb_config
 
+  postgresql_data:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /mnt/violet/docker-volumes/postgresql_data
+
 networks:
+  postgresql_internal_net:
+    driver: bridge
+    name: postgresql_internal_net
+
   mysql_internal_net:
     driver: bridge
     name: mysql_internal_net
@@ -39,6 +50,18 @@ networks:
     name: redis_public_net
 
 services:
+  database__internal_postgresql:
+    container_name: database__internal_postgresql
+    image: postgres:16
+    restart: always
+    volumes:
+      - postgresql_data:/var/lib/postgresql/data
+    networks:
+      - postgresql_internal_net
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+
   database__public_redis:
     container_name: database__public_redis
     restart: always

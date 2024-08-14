@@ -1,0 +1,18 @@
+name: internal__hoppscotch
+services:
+  internal__hoppscotch:
+    container_name: internal__hoppscotch
+    restart: unless-stopped
+    env_file:
+      - ./../../../docker.env/.internal.hoppscotch.env
+    image: hoppscotch/hoppscotch
+    networks:
+      - proxy_net
+      - postgresql_internal_net
+
+networks:
+  postgresql_internal_net:
+    external: true
+
+  proxy_net:
+    external: true
