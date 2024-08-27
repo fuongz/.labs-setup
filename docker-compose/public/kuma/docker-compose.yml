@@ -1,0 +1,24 @@
+name: public__kuma
+
+networks:
+  public_net:
+    external: true
+
+services:
+  public__kuma:
+    restart: always
+    networks:
+      - public_net
+    volumes:
+      - kuma_data:/app/data
+    container_name: public__kuma
+    image: louislam/uptime-kuma:1
+    
+volumes:
+  kuma_data:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /mnt/violet/docker-volumes/kuma_data
+
