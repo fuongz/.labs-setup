@@ -1,0 +1,19 @@
+name: internal__home-assistant
+services:
+  home-assistant:
+    container_name: internal__home-assistant
+    privileged: true
+    restart: unless-stopped
+    environment:
+      - TZ=Asia/Ho_Chi_Minh
+    volumes:
+      - ./config:/config
+      - /run/dbus:/run/dbus:ro
+    image: ghcr.io/home-assistant/home-assistant:stable
+    networks:
+      - proxy_net
+
+networks:
+    proxy_net:
+      name: proxy_net
+      external: true
